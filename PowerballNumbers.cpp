@@ -1,10 +1,10 @@
 #include <iostream>
 #include "sqlite/sqlite3.h"
-#include <string>
+//#include <string>
 #include <vector>
 #include <stdio.h>
-#include <stdlib.h>
-#include <cstring>
+//#include <stdlib.h>
+//#include <cstring>
 //#include <fstream>
 
 #include "PowerballNumbers.h"
@@ -18,6 +18,7 @@ class PowerballNumbers
 		int returnCode;//Return code variable for SQLite function.
 		sqlite3_stmt *statement;//SQL statement variable.
 		unsigned long dateToLong( unsigned int month, unsigned int day, unsigned int year );//Return the date as a long in the format yyyymmdd.
+		std::vector<PBNum> numbers;
 		
 	public:
 		enum PowerballTypes{ White, Powerball, PowerPlay };//The types of numbers stored in the database.
@@ -238,4 +239,23 @@ unsigned int PowerballNumbers::getDrawings()
 	sqlite3_finalize( statement );//Destroy the prepared statement to free up the database.
 	
 	return numDrawings;
+}
+
+void PowerballNumbers::load()
+{//Loads the data in the database into the numbers object.
+	char sqlStatement[200];//To represent the sql statement
+
+	//Get the count of the records matching the data given is in the database.
+	snprintf( sqlStatement, 200, "SELECT Number, Date, Type FROM PowerballNums;" );//Create the SQL statement.
+	returnCode = sqlite3_prepare_v2( db, sqlStatement, 200, &statement, 0 );//Run the SQL statement.
+	if( returnCode != SQLITE_OK )
+	{//If return code isn't the OK return code, send error.
+		fprintf( stderr, "PowerballNumbers::load: Error getting the numbers from the database: %s\n", sqlite3_errmsg(db) );
+	}
+	while( sqlite3_step(statement) == SQLITE_ROW )
+	{//Step through the rows returned from the SQL statement while there are still rows left.
+		//topNumbers.push_back( std::pair<int, int>(sqlite3_column_int(statement, 0), sqlite3_column_int(statement, 1)) );//Get the number of tables.
+		numbers.push_back( PBNum(sqlite3_column_int(statement, 0), sqlite3_column_int(statement, 1), sqlite3_column_int(statement, 2)) );//Get the number of tables.
+	}
+	sqlite3_finalize( statement );//Destroy the prepared statement to free up the database.
 }

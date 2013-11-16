@@ -24,6 +24,7 @@ class PBNum
 		enum PowerballTypes{ White, Powerball, PowerPlay };//The types of numbers stored in the database.
 		PBNum();//Constructor
 		PBNum( unsigned int newNum, unsigned char newMonth, unsigned char newDay, unsigned int newYear, unsigned char newType );//Constructor
+		PBNum( unsigned int newNum, unsigned long newDate, unsigned char newType );//Constructor
 		unsigned int getNumber();//Returns the number.
 		void setNumber( unsigned int newNum );//Sets the number.
 		unsigned long getDate();//Returns the value of the date in format yyyymmdd.
@@ -33,6 +34,8 @@ class PBNum
 		unsigned int getYear();//Returns the year.
 		unsigned int getType();//Returns the type.
 		void setType( unsigned int newType );//Sets the type.
+		unsigned long dateToLong( unsigned char month, unsigned char day, unsigned int year );//Return the date as a long in the format yyyymmdd.
+		void longToDate( unsigned long date, unsigned char &month, unsigned char &day, unsigned int &year );//Return the date as a set of unsigned ints from an input of long in the format yyyymmdd.
 };
 */
 
@@ -51,6 +54,13 @@ PBNum::PBNum( unsigned int newNum, unsigned char newMonth, unsigned char newDay,
 	month = newMonth;
 	day = newDay;
 	year = newYear;
+	type = newType;
+}
+
+PBNum::PBNum( unsigned int newNum, unsigned long newDate, unsigned char newType )
+{//Constructor
+	num = newNum;
+	longToDate( newDate, month, day, year );
 	type = newType;
 }
 
@@ -99,4 +109,16 @@ unsigned int PBNum::getType()
 void PBNum::setType( unsigned int newType )
 {//Sets the number.
 	type = newType;
+}
+
+unsigned long PBNum::dateToLong( unsigned char month, unsigned char day, unsigned int year )
+{//Return the date as a long in the format yyyymmdd.
+	return day + month*100 + year*10000;
+}
+
+void PBNum::longToDate( unsigned long date, unsigned char &month, unsigned char &day, unsigned int &year )
+{//Return the date as a set of unsigned ints from an input of long in the format yyyymmdd.
+	day = date%100;
+	month = (date/100)%100;
+	year = (date/10000);
 }

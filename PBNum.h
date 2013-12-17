@@ -1,17 +1,6 @@
 #ifndef PBNum_H
 #define PBNum_H
 
-/*
-#include <iostream>
-#include "sqlite/sqlite3.h"
-#include <string>
-#include <vector>
-#include <stdio.h>
-#include <stdlib.h>
-#include <cstring>
-#include <fstream>
-*/
-
 class PBNum
 {//A single powerball number
 	private:

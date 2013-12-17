@@ -1,13 +1,3 @@
-/*
-#include <iostream>
-#include "sqlite/sqlite3.h"
-#include <string>
-#include <vector>
-#include <stdio.h>
-#include <stdlib.h>
-#include <cstring>
-#include <fstream>
-*/
 
 #include "PBNum.h"
 

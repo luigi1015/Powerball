@@ -26,6 +26,10 @@ class PBNum
 		void setType( unsigned int newType );//Sets the type.
 		unsigned long dateToLong( unsigned char month, unsigned char day, unsigned int year );//Return the date as a long in the format yyyymmdd.
 		void longToDate( unsigned long date, unsigned char &month, unsigned char &day, unsigned int &year );//Return the date as a set of unsigned ints from an input of long in the format yyyymmdd.
+		friend bool operator <(const PBNum& lhs, const PBNum& rhs);//Less than operator, written mostly to put into set and whatever else might need to sort PBNums.
+                friend bool operator >(const PBNum& lhs, const PBNum& rhs);//Greater than operator, written mostly for what might need to sort/compare PBNums.
+                friend bool operator ==(const PBNum& lhs, const PBNum& rhs);//Equality operator, written mostly for what might need to sort/compare PBNums.
+                friend bool operator !=(const PBNum& lhs, const PBNum& rhs);//Inequality operator, written mostly for what might need to sort/compare PBNums.
 };
 */
 
@@ -111,4 +115,88 @@ void PBNum::longToDate( unsigned long date, unsigned char &month, unsigned char 
 	day = date%100;
 	month = (date/100)%100;
 	year = (date/10000);
+}
+
+bool operator <(const PBNum& lhs, const PBNum& rhs)
+{//Less than operator, written mostly to put into set and whatever else might need to sort PBNums.
+	if( lhs.getDate() == rhs.getDate() )
+	{//If the dates are the same, compare the numbers.
+		if( lhs.getType() == rhs.getType() )
+		{//If the number types are the same, compare the number values.
+			return ( lhs.getNumber() < rhs.getNumber() );
+		}
+		else
+		{//The number types aren't the same, but the dates are, so compare the number types.
+			return ( lhs.getType() < rhs.getType() );
+		}
+	}
+	else
+	{//Dates aren't the same, so compare the dates.
+		return ( lhs.getDate() < rhs.getDate() );
+	}
+
+	//Shouldn't get this far since dates should be equal or not.
+}
+
+bool operator >(const PBNum& lhs, const PBNum& rhs)
+{//Greater than operator, written mostly for whay might need to sort/compare PBNums.
+	if( lhs.getDate() == rhs.getDate() )
+	{//If the dates are the same, compare the numbers.
+		if( lhs.getType() == rhs.getType() )
+		{//If the number types are the same, compare the number values.
+			return ( lhs.getNumber() > rhs.getNumber() );
+		}
+		else
+		{//The number types aren't the same, but the dates are, so compare the number types.
+			return ( lhs.getType() > rhs.getType() );
+		}
+	}
+	else
+	{//Dates aren't the same, so compare the dates.
+		return ( lhs.getDate() > rhs.getDate() );
+	}
+
+	//Shouldn't get this far since dates should be equal or not.
+}
+
+bool operator ==(const PBNum& lhs, const PBNum& rhs)
+{//Equality operator, written mostly for whay might need to sort/compare PBNums.
+	if( lhs.getDate() == rhs.getDate() )
+	{//If the dates are the same, compare the numbers.
+		if( lhs.getType() == rhs.getType() )
+		{//If the number types are the same, compare the number values.
+			return ( lhs.getNumber() == rhs.getNumber() );
+		}
+		else
+		{//The number types aren't the same, so return that they aren't equal.
+			return false;
+		}
+	}
+	else
+	{//Dates aren't the same, so return that they aren't equal.
+		return false;
+	}
+
+	//Shouldn't get this far since dates should be equal or not.
+}
+
+bool operator !=(const PBNum& lhs, const PBNum& rhs)
+{//Inequality operator, written mostly for whay might need to sort/compare PBNums.
+	if( lhs.getDate() == rhs.getDate() )
+	{//If the dates are the same, compare the numbers.
+		if( lhs.getType() == rhs.getType() )
+		{//If the number types are the same, compare the number values.
+			return ( lhs.getNumber() != rhs.getNumber() );
+		}
+		else
+		{//The number types aren't the same, so return that they aren't equal.
+			return true;
+		}
+	}
+	else
+	{//Dates aren't the same, so return that they aren't equal.
+		return true;
+	}
+
+	//Shouldn't get this far since dates should be equal or not.
 }

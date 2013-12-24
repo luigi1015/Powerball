@@ -1,7 +1,8 @@
 #include <iostream>
 #include "sqlite/sqlite3.h"
 //#include <string>
-#include <vector>
+//#include <vector>
+#include <set>
 #include <stdio.h>
 //#include <stdlib.h>
 //#include <cstring>
@@ -18,19 +19,22 @@ class PowerballNumbers
 		int returnCode;//Return code variable for SQLite function.
 		sqlite3_stmt *statement;//SQL statement variable.
 		unsigned long dateToLong( unsigned int month, unsigned int day, unsigned int year );//Return the date as a long in the format yyyymmdd.
-		std::vector<PBNum> numbers;
+		//std::vector<PBNum> numbers;
+		std::set<PBNum> nums;
 		
 	public:
 		enum PowerballTypes{ White, Powerball, PowerPlay };//The types of numbers stored in the database.
 		PowerballNumbers();//Constructor
 		~PowerballNumbers();//Destructor
-		bool addNum( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type );//Add a number with an associated drawing date and type (white ball, Powerball, PowerPlay). Returns true if the add succeeded or false if not.
+		void addNum( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type );//Add a number with an associated drawing date and type (white ball, Powerball, PowerPlay).
 		bool addNumWCheck( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type );//Same with addNum but checks isSaved first.
 		void clear();//Clear the list of stored numbers.
-		unsigned long numCount();//Returns how many numbers in the database.
+		unsigned long numCount();//Returns how many numbers in memory.
 		bool isSaved( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type );//Checked if a number is in the database. Returns true if yes, false if not.
 		std::vector<std::pair<int, int> > topNumsByType( unsigned char count, PowerballTypes type );//Returns the top count numbers in the database of type type in terms of number of occurences as a vector<pair<int, int>>.The first int is the number and the second int is the number of occurences.
 		unsigned int getDrawings();//Returns the total number of drawings in the database.
+		void load();//Loads the data in the database into the nums object.
+		void save();//Saves the data in the nums object to the database.
 };
 */
 
@@ -105,11 +109,15 @@ PowerballNumbers::PowerballNumbers()
 
 PowerballNumbers::~PowerballNumbers()
 {//Destructor
+	//Probably should save the data in nums to the database before closing the database.
+
 	sqlite3_close( db );//Close the database.
 }
 
 unsigned long PowerballNumbers::numCount()
-{//Returns how many numbers in the database.
+{//Returns how many numbers in memory.
+	return nums.size();
+/*
 	unsigned long numberCount;//Used for the number count.
 
 	//Get the number count.
@@ -125,10 +133,13 @@ unsigned long PowerballNumbers::numCount()
 	sqlite3_finalize( statement );//Destroy the prepared statement to free up the database.
 	
 	return numberCount;
+*/
 }
 
-bool PowerballNumbers::addNum( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type )
-{//Add a number with an associated drawing date and type (white ball, Powerball, PowerPlay). Returns true if the add succeeded or false if not.
+void PowerballNumbers::addNum( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type )
+{//Add a number with an associated drawing date and type (white ball, Powerball, PowerPlay).
+	nums.insert( PBNum(number, month, day, year, type) );
+/*
 	char sqlStatement[100];//To represent the sql statement
 	char *sqlError;//To hold errors from sqlite3_exec
 	//snprintf( sqlStatement, 100, "INSERT INTO PowerballNums( Number, Date, Type ) VALUES (%u, %u, '%d');", number, (day+month*100+year*10000), type );
@@ -144,6 +155,7 @@ bool PowerballNumbers::addNum( unsigned char number, unsigned char month, unsign
 	}
 	//sqlite3_finalize( statement );//Destroy the prepared statement to free up the database.
 	return true;
+*/
 }
 
 bool PowerballNumbers::addNumWCheck( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type )
@@ -242,7 +254,7 @@ unsigned int PowerballNumbers::getDrawings()
 }
 
 void PowerballNumbers::load()
-{//Loads the data in the database into the numbers object.
+{//Loads the data in the database into the nums object.
 	char sqlStatement[200];//To represent the sql statement
 
 	//Get the count of the records matching the data given is in the database.
@@ -255,7 +267,13 @@ void PowerballNumbers::load()
 	while( sqlite3_step(statement) == SQLITE_ROW )
 	{//Step through the rows returned from the SQL statement while there are still rows left.
 		//topNumbers.push_back( std::pair<int, int>(sqlite3_column_int(statement, 0), sqlite3_column_int(statement, 1)) );//Get the number of tables.
-		numbers.push_back( PBNum(sqlite3_column_int(statement, 0), sqlite3_column_int(statement, 1), sqlite3_column_int(statement, 2)) );//Get the number of tables.
+		//numbers.push_back( PBNum(sqlite3_column_int(statement, 0), sqlite3_column_int(statement, 1), sqlite3_column_int(statement, 2)) );//Get the number of tables.
+		nums.insert( PBNum(sqlite3_column_int(statement, 0), sqlite3_column_int(statement, 1), sqlite3_column_int(statement, 2)) );//Put the number in the set.
 	}
 	sqlite3_finalize( statement );//Destroy the prepared statement to free up the database.
+}
+
+void PowerballNumbers::save()
+{//Saves the data in the nums object to the database.
+	//Probably a good idea to use "OR IGNORE" clause in the SQL Insert statement.
 }

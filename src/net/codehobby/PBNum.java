@@ -14,5 +14,14 @@ public class PBNum {
 	{//Set Number.
 		num = newNum;
 	}
+	public int getMonth()
+	{//Returns number.
+		return month;
+	}
+
+	public void setMonth( int newMonth )
+	{//Set Number.
+		month = newMonth;
+	}
 
 }

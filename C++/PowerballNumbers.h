@@ -35,6 +35,7 @@ class PowerballNumbers
 		PowerballNumbers();//Constructor
 		~PowerballNumbers();//Destructor
 		bool addNum( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type );//Add a number with an associated drawing date and type (white ball, Powerball, PowerPlay).
+		bool PowerballNumbers::addNums( std::set<PBNum> newNums );//Add a set of numbers with their associated drawing dates and types (white ball, Powerball, PowerPlay).
 		bool addNumWCheck( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type );//Same with addNum but checks isSaved first.
 		void clear();//Clear the list of stored numbers.
 		unsigned long numCount();//Returns how many numbers in the database.

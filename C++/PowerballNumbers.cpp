@@ -8,6 +8,7 @@
 //#include <cstring>
 //#include <fstream>
 #include <utility>
+#include <string>
 
 #include "PowerballNumbers.h"
 
@@ -141,7 +142,7 @@ bool PowerballNumbers::addNum( unsigned char number, unsigned char month, unsign
 {//Add a number with an associated drawing date and type (white ball, Powerball, PowerPlay).
 	std::pair<std::set<PBNum>::iterator, bool> insertInfo = nums.insert( PBNum(number, month, day, year, type) );
 	//return insertInfo.second;
-
+/*
 	char sqlStatement[100];//To represent the sql statement
 	char *sqlError;//To hold errors from sqlite3_exec
 	//snprintf( sqlStatement, 100, "INSERT INTO PowerballNums( Number, Date, Type ) VALUES (%u, %u, '%d');", number, (day+month*100+year*10000), type );
@@ -155,6 +156,54 @@ bool PowerballNumbers::addNum( unsigned char number, unsigned char month, unsign
 		//sqlite3_close( db );
 		return false;
 	}
+	//sqlite3_finalize( statement );//Destroy the prepared statement to free up the database.
+	return true;
+*/
+}
+
+bool PowerballNumbers::addNums( std::set<PBNum> newNums )
+{//Add a set of numbers with their associated drawing dates and types (white ball, Powerball, PowerPlay).
+	//std::pair<std::set<PBNum>::iterator, bool> insertInfo = nums.insert( PBNum(number, month, day, year, type) );
+	//return insertInfo.second;
+	nums.insert( newNums.begin(), newNums.end() );
+
+	std::string sqlStatement = "";//To represent the sql statement
+	char *sqlError;//To hold errors from sqlite3_exec
+	//snprintf( sqlStatement, 100, "INSERT INTO PowerballNums( Number, Date, Type ) VALUES (%u, %u, '%d');", number, (day+month*100+year*10000), type );
+	//snprintf( sqlStatement, 100, "INSERT INTO PowerballNums( Number, Date, Type ) VALUES (%u, %lu, '%d');", number, dateToLong(month, day, year), type );
+	
+	//for( int i = 0; i < newNums.size(); i++ )
+	std::set<PBNum>::iterator newPowerballNumber = newNums.begin();
+	sqlStatement = "INSERT INTO PowerballNums( Number, Date, Type ) VALUES (";
+	sqlStatement += (*newPowerballNumber).getNumber();
+	sqlStatement += ", ";
+	sqlStatement += (*newPowerballNumber).getDate();
+	sqlStatement += ", ";
+	sqlStatement += (*newPowerballNumber).getType();
+	sqlStatement += ")";
+	newPowerballNumber++;
+
+	while( newPowerballNumber != newNums.end() )
+	{
+		sqlStatement += ", (";
+		sqlStatement += (*newPowerballNumber).getNumber();
+		sqlStatement += ", ";
+		sqlStatement += (*newPowerballNumber).getDate();
+		sqlStatement += ", ";
+		sqlStatement += (*newPowerballNumber).getType();
+		sqlStatement += ")";
+	}
+	std::cout << sqlStatement << std::endl;//Temp sanity check on the sql statement.
+/*
+	returnCode = sqlite3_exec( db, sqlStatement, 0, 0, &sqlError );//Create the table.
+	if( returnCode != SQLITE_OK )
+	{//If return code isn't the OK return code, send error.
+		//fprintf( stderr, "Error inserting a number into the table: %s\n", sqlite3_errmsg(db) );
+		fprintf( stderr, "PowerballNumbers::addNum: Error inserting a number into the table: %s\n", sqlError );
+		//sqlite3_close( db );
+		return false;
+	}
+*/
 	//sqlite3_finalize( statement );//Destroy the prepared statement to free up the database.
 	return true;
 

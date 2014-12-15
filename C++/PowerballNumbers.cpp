@@ -140,13 +140,13 @@ unsigned long PowerballNumbers::numCount()
 bool PowerballNumbers::addNum( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type )
 {//Add a number with an associated drawing date and type (white ball, Powerball, PowerPlay).
 	std::pair<std::set<PBNum>::iterator, bool> insertInfo = nums.insert( PBNum(number, month, day, year, type) );
-	return insertInfo.second;
-/*
+	//return insertInfo.second;
+
 	char sqlStatement[100];//To represent the sql statement
 	char *sqlError;//To hold errors from sqlite3_exec
 	//snprintf( sqlStatement, 100, "INSERT INTO PowerballNums( Number, Date, Type ) VALUES (%u, %u, '%d');", number, (day+month*100+year*10000), type );
 	snprintf( sqlStatement, 100, "INSERT INTO PowerballNums( Number, Date, Type ) VALUES (%u, %lu, '%d');", number, dateToLong(month, day, year), type );
-	//std::cout << sqlStatement << std::endl;//Temp sanity check on the sql statement.
+	std::cout << sqlStatement << std::endl;//Temp sanity check on the sql statement.
 	returnCode = sqlite3_exec( db, sqlStatement, 0, 0, &sqlError );//Create the table.
 	if( returnCode != SQLITE_OK )
 	{//If return code isn't the OK return code, send error.
@@ -157,7 +157,7 @@ bool PowerballNumbers::addNum( unsigned char number, unsigned char month, unsign
 	}
 	//sqlite3_finalize( statement );//Destroy the prepared statement to free up the database.
 	return true;
-*/
+
 }
 
 bool PowerballNumbers::addNumWCheck( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type )
@@ -221,6 +221,7 @@ std::vector<std::pair<int, int> > PowerballNumbers::topNumsByType( unsigned char
 	//Get the count of the records matching the data given is in the database.
 	//snprintf( sqlStatement, 100, "SELECT Number, count(*) FROM PowerballNums WHERE Type='%d' GROUP BY Number ORDER BY NUMBER LIMIT %u;", type, count );
 	snprintf( sqlStatement, 200, "SELECT Number, count(*) AS Count FROM PowerballNums WHERE Type='%d' GROUP BY Number ORDER BY Count DESC LIMIT %u;", type, count );
+	std::cout << sqlStatement << std::endl;
 	//std::cout << sqlStatement << std::endl;//Temp check of sqlStatement.
 	returnCode = sqlite3_prepare_v2( db, sqlStatement, 200, &statement, 0 );//Check to see if there are any tables.
 	if( returnCode != SQLITE_OK )
@@ -231,6 +232,7 @@ std::vector<std::pair<int, int> > PowerballNumbers::topNumsByType( unsigned char
 	}
 	while( sqlite3_step(statement) == SQLITE_ROW )
 	{//Step through the rows while there are still rows left.
+		std::cout << "Processing a row in topNumsByType" << std::endl;
 		topNumbers.push_back( std::pair<int, int>(sqlite3_column_int(statement, 0), sqlite3_column_int(statement, 1)) );//Get the number of tables.
 	}
 	sqlite3_finalize( statement );//Destroy the prepared statement to free up the database.

@@ -57,7 +57,7 @@ void Powerball::readFile( std::string filename )
 			//printf("Date: %u/%u/%u\twb1: '%u'\twb2: '%u'\twb3: '%u'\twb4: '%u'\twb5: '%u'\tpb: '%u'\tpp: '%u'\n", month, day, year, wb1, wb2, wb3, wb4, wb5, pb, pp);
 			if( nums.isSaved(wb1, month, day, year, nums.White) == false )
 			{//If the number isn't in the database. save it to the database.
-				std::cout << "Adding number " << wb1 << " " << month << "/" << day << "/" << year << "White ball." << std::endl;
+				//std::cout << "Adding number " << wb1 << " " << month << "/" << day << "/" << year << " White ball." << std::endl;
 				nums.addNum( wb1, month, day, year, nums.White );
 				xmlNums.addNum( wb1, month, day, year, nums.White );
 			}
@@ -68,7 +68,7 @@ void Powerball::readFile( std::string filename )
 			}
 			if( nums.isSaved(wb2, month, day, year, nums.White) == false )
 			{//If the number isn't in the database. save it to the database.
-				std::cout << "Adding number " << wb2 << " " << month << "/" << day << "/" << year << " White ball." << std::endl;
+				//std::cout << "Adding number " << wb2 << " " << month << "/" << day << "/" << year << " White ball." << std::endl;
 				nums.addNum( wb2, month, day, year, nums.White );
 				xmlNums.addNum( wb2, month, day, year, nums.White );
 			}
@@ -79,7 +79,7 @@ void Powerball::readFile( std::string filename )
 			}
 			if( nums.isSaved(wb3, month, day, year, nums.White) == false )
 			{//If the number isn't in the database. save it to the database.
-				std::cout << "Adding number " << wb3 << " " << month << "/" << day << "/" << year << " White ball." << std::endl;
+				//std::cout << "Adding number " << wb3 << " " << month << "/" << day << "/" << year << " White ball." << std::endl;
 				nums.addNum( wb3, month, day, year, nums.White );
 				xmlNums.addNum( wb3, month, day, year, nums.White );
 			}
@@ -90,7 +90,7 @@ void Powerball::readFile( std::string filename )
 			}
 			if( nums.isSaved(wb4, month, day, year, nums.White) == false )
 			{//If the number isn't in the database. save it to the database.
-				std::cout << "Adding number " << wb4 << " " << month << "/" << day << "/" << year << " White ball." << std::endl;
+				//std::cout << "Adding number " << wb4 << " " << month << "/" << day << "/" << year << " White ball." << std::endl;
 				nums.addNum( wb4, month, day, year, nums.White );
 				xmlNums.addNum( wb4, month, day, year, nums.White );
 			}
@@ -101,7 +101,7 @@ void Powerball::readFile( std::string filename )
 			}
 			if( nums.isSaved(wb5, month, day, year, nums.White) == false )
 			{//If the number isn't in the database. save it to the database.
-				std::cout << "Adding number " << wb5 << " " << month << "/" << day << "/" << year << " White ball." << std::endl;
+				//std::cout << "Adding number " << wb5 << " " << month << "/" << day << "/" << year << " White ball." << std::endl;
 				nums.addNum( wb5, month, day, year, nums.White );
 				xmlNums.addNum( wb5, month, day, year, nums.White );
 			}
@@ -112,7 +112,7 @@ void Powerball::readFile( std::string filename )
 			}
 			if( nums.isSaved(pb, month, day, year, nums.Powerball) == false )
 			{//If the number isn't in the database. save it to the database.
-				std::cout << "Adding number " << pb << " " << month << "/" << day << "/" << year << " Powerball." << std::endl;
+				//std::cout << "Adding number " << pb << " " << month << "/" << day << "/" << year << " Powerball." << std::endl;
 				nums.addNum( pb, month, day, year, nums.Powerball );
 				xmlNums.addNum( pb, month, day, year, nums.Powerball );
 			}
@@ -127,7 +127,7 @@ void Powerball::readFile( std::string filename )
 		{//If pp was scanned in from sscanf above.
 			if( nums.isSaved(pp, month, day, year, nums.PowerPlay) == false )
 			{//If the number isn't in the database. save it to the database.
-				std::cout << "Adding number " << pp << " " << month << "/" << day << "/" << year << " Power Play." << std::endl;
+				//std::cout << "Adding number " << pp << " " << month << "/" << day << "/" << year << " Power Play." << std::endl;
 				nums.addNum( pp, month, day, year, nums.PowerPlay );
 				xmlNums.addNum( pp, month, day, year, nums.PowerPlay );
 			}

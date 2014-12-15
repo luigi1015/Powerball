@@ -8,6 +8,7 @@
 #include <fstream>
 
 #include "SimpleXMLPB.h"
+#include "PBNum.h"
 
 /*
 class SimpleXMLPB

@@ -58,7 +58,7 @@ PBNum::PBNum( unsigned int newNum, unsigned long newDate, unsigned char newType 
 	type = newType;
 }
 
-unsigned int PBNum::getNumber()
+unsigned int PBNum::getNumber() const
 {//Returns the number.
 	return num;
 }
@@ -68,7 +68,7 @@ void PBNum::setNumber( unsigned int newNum )
 	num = newNum;
 }
 
-unsigned long PBNum::getDate()
+unsigned long PBNum::getDate() const
 {//Returns the value of the date in format yyyymmdd.
 	return day + month*100 + year*10000;
 }
@@ -80,22 +80,22 @@ void PBNum::setDate( unsigned char newMonth, unsigned char newDay, unsigned int 
 	year = newYear;
 }
 
-unsigned char PBNum::getMonth()
+unsigned char PBNum::getMonth() const
 {//Returns the month.
 	return month;
 }
 
-unsigned char PBNum::getDay()
+unsigned char PBNum::getDay() const
 {//Returns the day.
 	return day;
 }
 
-unsigned int PBNum::getYear()
+unsigned int PBNum::getYear() const
 {//Returns the year.
 	return year;
 }
 
-unsigned int PBNum::getType()
+unsigned int PBNum::getType() const
 {//Returns the number.
 	return type;
 }

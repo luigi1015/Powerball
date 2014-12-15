@@ -15,6 +15,7 @@
 
 #include <set>
 #include <utility>
+#include <vector>
 #include "sqlite/sqlite3.h"
 #include "PBNum.h"
 
@@ -33,7 +34,7 @@ class PowerballNumbers
 		enum PowerballTypes{ White, Powerball, PowerPlay };//The types of numbers stored in the database.
 		PowerballNumbers();//Constructor
 		~PowerballNumbers();//Destructor
-		void addNum( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type );//Add a number with an associated drawing date and type (white ball, Powerball, PowerPlay).
+		bool addNum( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type );//Add a number with an associated drawing date and type (white ball, Powerball, PowerPlay).
 		bool addNumWCheck( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type );//Same with addNum but checks isSaved first.
 		void clear();//Clear the list of stored numbers.
 		unsigned long numCount();//Returns how many numbers in the database.

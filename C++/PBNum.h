@@ -14,14 +14,14 @@ class PBNum
 		PBNum();//Constructor
 		PBNum( unsigned int newNum, unsigned char newMonth, unsigned char newDay, unsigned int newYear, unsigned char newType );//Constructor
 		PBNum( unsigned int newNum, unsigned long newDate, unsigned char newType );//Constructor
-		unsigned int getNumber();//Returns the number.
+		unsigned int getNumber() const;//Returns the number.
 		void setNumber( unsigned int newNum );//Sets the number.
-		unsigned long getDate();//Returns the value of the date in format yyyymmdd.
+		unsigned long getDate() const;//Returns the value of the date in format yyyymmdd.
 		void setDate( unsigned char newMonth, unsigned char newDay, unsigned int newYear );//Sets the date.
-		unsigned char getMonth();//Returns the month.
-		unsigned char getDay();//Returns the day.
-		unsigned int getYear();//Returns the year.
-		unsigned int getType();//Returns the type.
+		unsigned char getMonth() const;//Returns the month.
+		unsigned char getDay() const;//Returns the day.
+		unsigned int getYear() const;//Returns the year.
+		unsigned int getType() const;//Returns the type.
 		void setType( unsigned int newType );//Sets the type.
 		unsigned long dateToLong( unsigned char month, unsigned char day, unsigned int year );//Return the date as a long in the format yyyymmdd.
 		void longToDate( unsigned long date, unsigned char &month, unsigned char &day, unsigned int &year );//Return the date as a set of unsigned ints from an input of long in the format yyyymmdd.

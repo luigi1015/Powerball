@@ -1,12 +1,13 @@
 #include <iostream>
 #include "sqlite/sqlite3.h"
 //#include <string>
-//#include <vector>
+#include <vector>
 #include <set>
 #include <stdio.h>
 //#include <stdlib.h>
 //#include <cstring>
 //#include <fstream>
+#include <utility>
 
 #include "PowerballNumbers.h"
 
@@ -136,9 +137,10 @@ unsigned long PowerballNumbers::numCount()
 */
 }
 
-void PowerballNumbers::addNum( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type )
+bool PowerballNumbers::addNum( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type )
 {//Add a number with an associated drawing date and type (white ball, Powerball, PowerPlay).
-	nums.insert( PBNum(number, month, day, year, type) );
+	std::pair<std::set<PBNum>::iterator, bool> insertInfo = nums.insert( PBNum(number, month, day, year, type) );
+	return insertInfo.second;
 /*
 	char sqlStatement[100];//To represent the sql statement
 	char *sqlError;//To hold errors from sqlite3_exec

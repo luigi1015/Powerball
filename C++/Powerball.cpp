@@ -16,6 +16,7 @@ class Powerball
 	private:
 		PowerballNumbers nums;
 		SimpleXMLPB xmlNums;
+		SimpleJSONPB jsonNums;
 		//unsigned long dateToLong( unsigned int month, unsigned int day, unsigned int year );//Return the date as a long in the format yyyymmdd.
 		
 	public:
@@ -47,7 +48,8 @@ void Powerball::readFile( std::string filename )
 	PBNum pbNum;//To represent a Powerball number
 	//unsigned long dateNum;//A date in the format yyyymmdd.
 	std::set<PBNum> numsToSave;
-	
+
+	std::cout << "Processing " << filename << std::endl;
 	while( getline(pbFile, pbLine) )
 	{//While there are still lines to read in the file, read lines into pbLine.
 		//if( sscanf( pbLine.c_str(), "%ud/%ud/%ud  %ud  %ud  %ud  %ud  %ud  %ud  %ud", &month, &day, &year, &wb1, &wb2, &wb3, &wb4, &wb5, &pb, &pp) != 0)
@@ -69,11 +71,13 @@ void Powerball::readFile( std::string filename )
 				numsToSave.insert( pbNum );
 				//nums.addNum( wb1, month, day, year, nums.White );
 				xmlNums.addNum( wb1, month, day, year, nums.White );
+				jsonNums.addNum( wb1, month, day, year, nums.White );
 			}
 			else
 			{
 				//std::cout << "Already in the database." << std::endl;
 				xmlNums.addNum( wb1, month, day, year, nums.White );
+				jsonNums.addNum( wb1, month, day, year, nums.White );
 			}
 			if( nums.isSaved(wb2, month, day, year, nums.White) == false )
 			{//If the number isn't in the database. save it to the database.
@@ -83,11 +87,13 @@ void Powerball::readFile( std::string filename )
 				numsToSave.insert( pbNum );
 				//nums.addNum( wb2, month, day, year, nums.White );
 				xmlNums.addNum( wb2, month, day, year, nums.White );
+				jsonNums.addNum( wb2, month, day, year, nums.White );
 			}
 			else
 			{
 				//std::cout << "Already in the database." << std::endl;
 				xmlNums.addNum( wb2, month, day, year, nums.White );
+				jsonNums.addNum( wb2, month, day, year, nums.White );
 			}
 			if( nums.isSaved(wb3, month, day, year, nums.White) == false )
 			{//If the number isn't in the database. save it to the database.
@@ -97,11 +103,13 @@ void Powerball::readFile( std::string filename )
 				numsToSave.insert( pbNum );
 				//nums.addNum( wb3, month, day, year, nums.White );
 				xmlNums.addNum( wb3, month, day, year, nums.White );
+				jsonNums.addNum( wb3, month, day, year, nums.White );
 			}
 			else
 			{
 				//std::cout << "Already in the database." << std::endl;
 				xmlNums.addNum( wb3, month, day, year, nums.White );
+				jsonNums.addNum( wb3, month, day, year, nums.White );
 			}
 			if( nums.isSaved(wb4, month, day, year, nums.White) == false )
 			{//If the number isn't in the database. save it to the database.
@@ -111,11 +119,13 @@ void Powerball::readFile( std::string filename )
 				numsToSave.insert( pbNum );
 				//nums.addNum( wb4, month, day, year, nums.White );
 				xmlNums.addNum( wb4, month, day, year, nums.White );
+				jsonNums.addNum( wb4, month, day, year, nums.White );
 			}
 			else
 			{
 				//std::cout << "Already in the database." << std::endl;
 				xmlNums.addNum( wb4, month, day, year, nums.White );
+				jsonNums.addNum( wb4, month, day, year, nums.White );
 			}
 			if( nums.isSaved(wb5, month, day, year, nums.White) == false )
 			{//If the number isn't in the database. save it to the database.
@@ -125,11 +135,13 @@ void Powerball::readFile( std::string filename )
 				numsToSave.insert( pbNum );
 				//nums.addNum( wb5, month, day, year, nums.White );
 				xmlNums.addNum( wb5, month, day, year, nums.White );
+				jsonNums.addNum( wb5, month, day, year, nums.White );
 			}
 			else
 			{
 				//std::cout << "Already in the database." << std::endl;
 				xmlNums.addNum( wb5, month, day, year, nums.White );
+				jsonNums.addNum( wb5, month, day, year, nums.White );
 			}
 			if( nums.isSaved(pb, month, day, year, nums.Powerball) == false )
 			{//If the number isn't in the database. save it to the database.
@@ -139,11 +151,13 @@ void Powerball::readFile( std::string filename )
 				numsToSave.insert( pbNum );
 				//nums.addNum( pb, month, day, year, nums.Powerball );
 				xmlNums.addNum( pb, month, day, year, nums.Powerball );
+				jsonNums.addNum( pb, month, day, year, nums.Powerball );
 			}
 			else
 			{
 				//std::cout << "Already in the database." << std::endl;
 				xmlNums.addNum( pb, month, day, year, nums.Powerball );
+				jsonNums.addNum( pb, month, day, year, nums.Powerball );
 			}
 			numLines++;
 		}
@@ -157,24 +171,33 @@ void Powerball::readFile( std::string filename )
 				numsToSave.insert( pbNum );
 				//nums.addNum( pp, month, day, year, nums.PowerPlay );
 				xmlNums.addNum( pp, month, day, year, nums.PowerPlay );
+				jsonNums.addNum( pp, month, day, year, nums.PowerPlay );
 			}
 			else
 			{
 				//std::cout << "Already in the database." << std::endl;
 				xmlNums.addNum( pp, month, day, year, nums.PowerPlay );
+				jsonNums.addNum( pp, month, day, year, nums.PowerPlay );
 			}
 		}
 	}
 	//Add the numbers to the database and memory with the nums object.
+	std::cout << "Finished pocessing the file, saving new data to the database." << std::endl;
 	nums.addNums( numsToSave );
+	std::cout << "Finished saving new data to the database." << std::endl;
 
 	//Save the XML file.
 	xmlNums.saveToFile( "Powerball.xml" );
 	xmlNums.loadFromFile( "Powerball.xml" );
 
+	//Save the JSON file.
+	jsonNums.saveToFile( "Powerball.json" );
+	jsonNums.loadFromFile( "Powerball.json" );
+
 	//Output to the user how many lines processed
 	printf( "Number lines processed: %u\n", numLines );
-	printf( "Number count in the database: %lu\n", nums.numCount() );
+	//printf( "Number count in the database: %lu\n", nums.numCount() );
+	printf( "Number count in the database: %lu\n", nums.numCountDatabase() );
 }
 
 void Powerball::getNums()

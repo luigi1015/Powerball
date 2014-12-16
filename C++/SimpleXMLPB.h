@@ -18,12 +18,12 @@
 #include "PBNum.h"
 
 class SimpleXMLPB
-{//A single powerball number
+{//Simply saves and loads data to and from an XML file.
 	private:
 		std::vector<PBNum> pbNumbers;
 		
 	public:
-		SimpleXMLPB( std::string filename );//Constructor
+		SimpleXMLPB( std::string filename );//Constructor with filename
 		SimpleXMLPB();//Constructor
 		void saveToFile( std::string filename );//Save the numbers data to a file in XML format.
 		void loadFromFile( std::string filename );//Load the XML file numbers.

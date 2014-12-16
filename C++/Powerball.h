@@ -13,6 +13,7 @@
 */
 
 #include "SimpleXMLPB.h"
+#include "SimpleJSONPB.h"
 #include "PowerballNumbers.h"
 
 class Powerball
@@ -20,6 +21,7 @@ class Powerball
 	private:
 		PowerballNumbers nums;
 		SimpleXMLPB xmlNums;
+		SimpleJSONPB jsonNums;
 		//unsigned long dateToLong( unsigned int month, unsigned int day, unsigned int year );//Return the date as a long in the format yyyymmdd.
 		
 	public:

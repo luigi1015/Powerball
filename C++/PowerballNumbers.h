@@ -38,7 +38,8 @@ class PowerballNumbers
 		bool addNums( std::set<PBNum> newNums );//Add a set of numbers with their associated drawing dates and types (white ball, Powerball, PowerPlay).
 		bool addNumWCheck( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type );//Same with addNum but checks isSaved first.
 		void clear();//Clear the list of stored numbers.
-		unsigned long numCount();//Returns how many numbers in the database.
+		unsigned long numCount();//Returns how many numbers in memory.
+		unsigned long numCountDatabase();//Returns how many numbers in the database.
 		bool isSavedToDB( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type );//Checked if a number is in the database. Returns true if yes, false if not.
 		bool isSaved( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type );//Checked if a number is in memory. Returns true if yes, false if not.
 		std::vector<std::pair<int, int> > topNumsByType( unsigned char count, PowerballTypes type );//Returns the top count numbers in the database of type type in terms of number of occurences as a vector<pair<int, int>>.The first int is the number and the second int is the number of occurences.

@@ -1,0 +1,14 @@
+<html ng-app>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
+		<script src="PowerballController.js"></script>
+	</head>
+	<body>
+		<div ng-controller='PowerballController'>
+			<p>Version {{pbObj.fileFormatVersion}}</p>
+			<div ng-repeat="number in pbObj.numbers">
+				<p>{{number.month}}/{{number.day}}/{{number.year}} - {{number.number}} - {{number.type}} <span ng-show="number.type == '0'">WB</span><span ng-show="number.type == '1'">PB</span><span ng-show="number.type == '2'">PP</span></p>
+			</div>
+		</div>
+	</body>
+</html>

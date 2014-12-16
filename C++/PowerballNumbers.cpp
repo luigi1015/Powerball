@@ -9,6 +9,7 @@
 //#include <fstream>
 #include <utility>
 #include <string>
+#include <sstream>
 
 #include "PowerballNumbers.h"
 
@@ -70,6 +71,7 @@ PowerballNumbers::PowerballNumbers()
 		//std::cout << "Didn't find a table, creating one." << std::endl;//Temp status output
 		//returnCode = sqlite3_prepare_v2( db, "CREATE TABLE PowerballNums ( Number INTEGER NOT NULL, Date INTEGER NOT NULL, Type TEXT NOT NULL);", 120, &statement, 0 );//Create the table.
 		returnCode = sqlite3_exec( db, "CREATE TABLE PowerballNums ( Number INTEGER NOT NULL, Date INTEGER NOT NULL, Type TEXT NOT NULL);", 0, 0, &sqlError );//Create the table.
+		//returnCode = sqlite3_exec( db, "CREATE TABLE PowerballNums ( Number INTEGER NOT NULL, Date NUMERIC NOT NULL, Type TEXT NOT NULL);", 0, 0, &sqlError );//Create the table.
 		//std::cout << "Ran execute." << std::endl;
 		if( returnCode != SQLITE_OK )
 		{//If return code isn't the OK return code, send error.
@@ -140,9 +142,10 @@ unsigned long PowerballNumbers::numCount()
 
 bool PowerballNumbers::addNum( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type )
 {//Add a number with an associated drawing date and type (white ball, Powerball, PowerPlay).
-	std::pair<std::set<PBNum>::iterator, bool> insertInfo = nums.insert( PBNum(number, month, day, year, type) );
+	//std::pair<std::set<PBNum>::iterator, bool> insertInfo = nums.insert( PBNum(number, month, day, year, type) );
 	//return insertInfo.second;
-/*
+	nums.insert( PBNum(number, month, day, year, type) );
+
 	char sqlStatement[100];//To represent the sql statement
 	char *sqlError;//To hold errors from sqlite3_exec
 	//snprintf( sqlStatement, 100, "INSERT INTO PowerballNums( Number, Date, Type ) VALUES (%u, %u, '%d');", number, (day+month*100+year*10000), type );
@@ -158,52 +161,61 @@ bool PowerballNumbers::addNum( unsigned char number, unsigned char month, unsign
 	}
 	//sqlite3_finalize( statement );//Destroy the prepared statement to free up the database.
 	return true;
-*/
+
 }
 
 bool PowerballNumbers::addNums( std::set<PBNum> newNums )
 {//Add a set of numbers with their associated drawing dates and types (white ball, Powerball, PowerPlay).
+	std::stringstream sqlStatement;
 	//std::pair<std::set<PBNum>::iterator, bool> insertInfo = nums.insert( PBNum(number, month, day, year, type) );
 	//return insertInfo.second;
 	nums.insert( newNums.begin(), newNums.end() );
 
-	std::string sqlStatement = "";//To represent the sql statement
+	//std::string sqlStatement = "";//To represent the sql statement
 	char *sqlError;//To hold errors from sqlite3_exec
 	//snprintf( sqlStatement, 100, "INSERT INTO PowerballNums( Number, Date, Type ) VALUES (%u, %u, '%d');", number, (day+month*100+year*10000), type );
 	//snprintf( sqlStatement, 100, "INSERT INTO PowerballNums( Number, Date, Type ) VALUES (%u, %lu, '%d');", number, dateToLong(month, day, year), type );
 	
 	//for( int i = 0; i < newNums.size(); i++ )
 	std::set<PBNum>::iterator newPowerballNumber = newNums.begin();
-	sqlStatement = "INSERT INTO PowerballNums( Number, Date, Type ) VALUES (";
-	sqlStatement += (*newPowerballNumber).getNumber();
-	sqlStatement += ", ";
-	sqlStatement += (*newPowerballNumber).getDate();
-	sqlStatement += ", ";
-	sqlStatement += (*newPowerballNumber).getType();
-	sqlStatement += ")";
+/*
+	sqlStatement << "INSERT INTO PowerballNums( Number, Date, Type ) VALUES (";
+	sqlStatement << (*newPowerballNumber).getNumber();
+	sqlStatement << ", ";
+	sqlStatement << (*newPowerballNumber).getDate();
+	sqlStatement << ", ";
+	sqlStatement << (*newPowerballNumber).getType();
+	sqlStatement << ")";
 	newPowerballNumber++;
+*/
+	//sqlStatement << "BEGIN TRANSACTION\n";
 
 	while( newPowerballNumber != newNums.end() )
 	{
-		sqlStatement += ", (";
-		sqlStatement += (*newPowerballNumber).getNumber();
-		sqlStatement += ", ";
-		sqlStatement += (*newPowerballNumber).getDate();
-		sqlStatement += ", ";
-		sqlStatement += (*newPowerballNumber).getType();
-		sqlStatement += ")";
+		//sqlStatement << ", (";
+		sqlStatement << "INSERT INTO PowerballNums ( Number, Date, Type ) VALUES (";
+		sqlStatement << (*newPowerballNumber).getNumber();
+		sqlStatement << ", ";
+		sqlStatement << (*newPowerballNumber).getDate();
+		sqlStatement << ", '";
+		sqlStatement << (*newPowerballNumber).getType();
+		sqlStatement << "');\n";
+		newPowerballNumber++;
 	}
-	std::cout << sqlStatement << std::endl;//Temp sanity check on the sql statement.
-/*
-	returnCode = sqlite3_exec( db, sqlStatement, 0, 0, &sqlError );//Create the table.
+
+	//sqlStatement << "END TRANSACTION\n";
+
+	std::cout << sqlStatement.str() << std::endl;//Temp sanity check on the sql statement.
+
+	returnCode = sqlite3_exec( db, sqlStatement.str().c_str(), 0, 0, &sqlError );//Insert the data.
 	if( returnCode != SQLITE_OK )
 	{//If return code isn't the OK return code, send error.
 		//fprintf( stderr, "Error inserting a number into the table: %s\n", sqlite3_errmsg(db) );
-		fprintf( stderr, "PowerballNumbers::addNum: Error inserting a number into the table: %s\n", sqlError );
+		fprintf( stderr, "PowerballNumbers::addNums: Error inserting a number into the table: %s\n", sqlError );
 		//sqlite3_close( db );
 		return false;
 	}
-*/
+
 	//sqlite3_finalize( statement );//Destroy the prepared statement to free up the database.
 	return true;
 
@@ -240,7 +252,7 @@ void PowerballNumbers::clear()
 	//sqlite3_finalize( statement );//Destroy the prepared statement to free up the database.
 }
 
-bool PowerballNumbers::isSaved( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type )
+bool PowerballNumbers::isSavedToDB( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type )
 {//Checked if a number is in the database. Returns true if yes, false if not.
 	unsigned long numberCount;//Used for how many records matching the data given is in the database.
 	char sqlStatement[100];//To represent the sql statement
@@ -260,6 +272,21 @@ bool PowerballNumbers::isSaved( unsigned char number, unsigned char month, unsig
 	sqlite3_finalize( statement );//Destroy the prepared statement to free up the database.
 	
 	return (numberCount > 0);
+}
+
+bool PowerballNumbers::isSaved( unsigned char number, unsigned char month, unsigned char day, unsigned int year, PowerballTypes type )
+{//Checked if a number is in memory. Returns true if yes, false if not.
+	//bool isSaved = false;
+	std::set<PBNum>::iterator powerballNumberIterator = nums.begin();
+
+	//Go through each number and check it until the end or a number equal to the parameter values is found.
+	while( (powerballNumberIterator != nums.end()) && !((*powerballNumberIterator).equals(number, month, day, year, type)) )
+	{
+		powerballNumberIterator++;
+	}
+
+	//If it reached the end, it didn't find a number equal to the values, so return the opposite boolean value to whether it reached the end.
+	return !(powerballNumberIterator == nums.end());
 }
 
 std::vector<std::pair<int, int> > PowerballNumbers::topNumsByType( unsigned char count, PowerballTypes type )

@@ -26,10 +26,11 @@ class PBNum
 		void setType( unsigned int newType );//Sets the type.
 		unsigned long dateToLong( unsigned char month, unsigned char day, unsigned int year );//Return the date as a long in the format yyyymmdd.
 		void longToDate( unsigned long date, unsigned char &month, unsigned char &day, unsigned int &year );//Return the date as a set of unsigned ints from an input of long in the format yyyymmdd.
+		bool equals( unsigned int newNum, unsigned char newMonth, unsigned char newDay, unsigned int newYear, unsigned char newType );//Checks if this number equals the values specified in the parameters.
 		friend bool operator <(const PBNum& lhs, const PBNum& rhs);//Less than operator, written mostly to put into set and whatever else might need to sort PBNums.
-                friend bool operator >(const PBNum& lhs, const PBNum& rhs);//Greater than operator, written mostly for what might need to sort/compare PBNums.
-                friend bool operator ==(const PBNum& lhs, const PBNum& rhs);//Equality operator, written mostly for what might need to sort/compare PBNums.
-                friend bool operator !=(const PBNum& lhs, const PBNum& rhs);//Inequality operator, written mostly for what might need to sort/compare PBNums.
+		friend bool operator >(const PBNum& lhs, const PBNum& rhs);//Greater than operator, written mostly for what might need to sort/compare PBNums.
+		friend bool operator ==(const PBNum& lhs, const PBNum& rhs);//Equality operator, written mostly for what might need to sort/compare PBNums.
+		friend bool operator !=(const PBNum& lhs, const PBNum& rhs);//Inequality operator, written mostly for what might need to sort/compare PBNums.
 };
 */
 
@@ -85,14 +86,29 @@ unsigned char PBNum::getMonth() const
 	return month;
 }
 
+void PBNum::setMonth( unsigned char newMonth )
+{//Sets the month.
+	month = newMonth;
+}
+
 unsigned char PBNum::getDay() const
 {//Returns the day.
 	return day;
 }
 
+void PBNum::setDay( unsigned char newDay )
+{//Sets the day.
+	day = newDay;
+}
+
 unsigned int PBNum::getYear() const
 {//Returns the year.
 	return year;
+}
+
+void PBNum::setYear( unsigned int newYear )
+{//Sets the year.
+	year = newYear;
 }
 
 unsigned int PBNum::getType() const
@@ -115,6 +131,11 @@ void PBNum::longToDate( unsigned long date, unsigned char &month, unsigned char 
 	day = date%100;
 	month = (date/100)%100;
 	year = (date/10000);
+}
+
+bool PBNum::equals( unsigned int newNum, unsigned char newMonth, unsigned char newDay, unsigned int newYear, unsigned char newType ) const
+{//Checks if this number equals the values specified in the parameters.
+	return (getNumber() == newNum) && (getMonth() == newMonth) && (getDay() == newDay) && (getYear() == newYear) && (getType() == newType);
 }
 
 bool operator <(const PBNum& lhs, const PBNum& rhs)

@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <cstring>
 #include <fstream>
+#include <set>
 
 #include "Powerball.h"
 
@@ -43,8 +44,9 @@ void Powerball::readFile( std::string filename )
 	unsigned int year;//Year of the Powerball drawing date.
 	unsigned int month, day, wb1, wb2, wb3, wb4, wb5, pb, pp;//The month and day of the drawing date along with the white ball numbers, powerball and power play numbers.
 	unsigned int numLines = 0;//Number of lines processed.
-	//PBNum pbNum;//To represent a Powerball number
+	PBNum pbNum;//To represent a Powerball number
 	//unsigned long dateNum;//A date in the format yyyymmdd.
+	std::set<PBNum> numsToSave;
 	
 	while( getline(pbFile, pbLine) )
 	{//While there are still lines to read in the file, read lines into pbLine.
@@ -55,10 +57,17 @@ void Powerball::readFile( std::string filename )
 			//printf("Date: %ud/%ud/%ud\nwb1: '%ud'\nwb2: '%ud'\nwb3: '%ud'\nwb4: '%ud'\nwb5: '%ud'\npb: '%ud'\npp: '%ud'\n", month, day, year, wb1, wb2, wb3, wb4, wb5, pb, pp);
 			//printf("Date: %u/%u/%u\nwb1: '%u'\nwb2: '%u'\nwb3: '%u'\nwb4: '%u'\nwb5: '%u'\npb: '%u'\npp: '%u'\n", month, day, year, wb1, wb2, wb3, wb4, wb5, pb, pp);
 			//printf("Date: %u/%u/%u\twb1: '%u'\twb2: '%u'\twb3: '%u'\twb4: '%u'\twb5: '%u'\tpb: '%u'\tpp: '%u'\n", month, day, year, wb1, wb2, wb3, wb4, wb5, pb, pp);
+
+			//Set the date of the Powerball Number for the set so it doesn't have to be set for every single Powerball number scanned in above.
+			pbNum.setDate( month, day, year );
+
 			if( nums.isSaved(wb1, month, day, year, nums.White) == false )
 			{//If the number isn't in the database. save it to the database.
 				//std::cout << "Adding number " << wb1 << " " << month << "/" << day << "/" << year << " White ball." << std::endl;
-				nums.addNum( wb1, month, day, year, nums.White );
+				pbNum.setNumber( wb1 );
+				pbNum.setType( nums.White );
+				numsToSave.insert( pbNum );
+				//nums.addNum( wb1, month, day, year, nums.White );
 				xmlNums.addNum( wb1, month, day, year, nums.White );
 			}
 			else
@@ -69,7 +78,10 @@ void Powerball::readFile( std::string filename )
 			if( nums.isSaved(wb2, month, day, year, nums.White) == false )
 			{//If the number isn't in the database. save it to the database.
 				//std::cout << "Adding number " << wb2 << " " << month << "/" << day << "/" << year << " White ball." << std::endl;
-				nums.addNum( wb2, month, day, year, nums.White );
+				pbNum.setNumber( wb2 );
+				pbNum.setType( nums.White );
+				numsToSave.insert( pbNum );
+				//nums.addNum( wb2, month, day, year, nums.White );
 				xmlNums.addNum( wb2, month, day, year, nums.White );
 			}
 			else
@@ -80,7 +92,10 @@ void Powerball::readFile( std::string filename )
 			if( nums.isSaved(wb3, month, day, year, nums.White) == false )
 			{//If the number isn't in the database. save it to the database.
 				//std::cout << "Adding number " << wb3 << " " << month << "/" << day << "/" << year << " White ball." << std::endl;
-				nums.addNum( wb3, month, day, year, nums.White );
+				pbNum.setNumber( wb3 );
+				pbNum.setType( nums.White );
+				numsToSave.insert( pbNum );
+				//nums.addNum( wb3, month, day, year, nums.White );
 				xmlNums.addNum( wb3, month, day, year, nums.White );
 			}
 			else
@@ -91,7 +106,10 @@ void Powerball::readFile( std::string filename )
 			if( nums.isSaved(wb4, month, day, year, nums.White) == false )
 			{//If the number isn't in the database. save it to the database.
 				//std::cout << "Adding number " << wb4 << " " << month << "/" << day << "/" << year << " White ball." << std::endl;
-				nums.addNum( wb4, month, day, year, nums.White );
+				pbNum.setNumber( wb4 );
+				pbNum.setType( nums.White );
+				numsToSave.insert( pbNum );
+				//nums.addNum( wb4, month, day, year, nums.White );
 				xmlNums.addNum( wb4, month, day, year, nums.White );
 			}
 			else
@@ -102,7 +120,10 @@ void Powerball::readFile( std::string filename )
 			if( nums.isSaved(wb5, month, day, year, nums.White) == false )
 			{//If the number isn't in the database. save it to the database.
 				//std::cout << "Adding number " << wb5 << " " << month << "/" << day << "/" << year << " White ball." << std::endl;
-				nums.addNum( wb5, month, day, year, nums.White );
+				pbNum.setNumber( wb5 );
+				pbNum.setType( nums.White );
+				numsToSave.insert( pbNum );
+				//nums.addNum( wb5, month, day, year, nums.White );
 				xmlNums.addNum( wb5, month, day, year, nums.White );
 			}
 			else
@@ -113,7 +134,10 @@ void Powerball::readFile( std::string filename )
 			if( nums.isSaved(pb, month, day, year, nums.Powerball) == false )
 			{//If the number isn't in the database. save it to the database.
 				//std::cout << "Adding number " << pb << " " << month << "/" << day << "/" << year << " Powerball." << std::endl;
-				nums.addNum( pb, month, day, year, nums.Powerball );
+				pbNum.setNumber( pb );
+				pbNum.setType( nums.Powerball );
+				numsToSave.insert( pbNum );
+				//nums.addNum( pb, month, day, year, nums.Powerball );
 				xmlNums.addNum( pb, month, day, year, nums.Powerball );
 			}
 			else
@@ -128,7 +152,10 @@ void Powerball::readFile( std::string filename )
 			if( nums.isSaved(pp, month, day, year, nums.PowerPlay) == false )
 			{//If the number isn't in the database. save it to the database.
 				//std::cout << "Adding number " << pp << " " << month << "/" << day << "/" << year << " Power Play." << std::endl;
-				nums.addNum( pp, month, day, year, nums.PowerPlay );
+				pbNum.setNumber( pp );
+				pbNum.setType( nums.PowerPlay );
+				numsToSave.insert( pbNum );
+				//nums.addNum( pp, month, day, year, nums.PowerPlay );
 				xmlNums.addNum( pp, month, day, year, nums.PowerPlay );
 			}
 			else
@@ -138,8 +165,14 @@ void Powerball::readFile( std::string filename )
 			}
 		}
 	}
+	//Add the numbers to the database and memory with the nums object.
+	nums.addNums( numsToSave );
+
+	//Save the XML file.
 	xmlNums.saveToFile( "Powerball.xml" );
 	xmlNums.loadFromFile( "Powerball.xml" );
+
+	//Output to the user how many lines processed
 	printf( "Number lines processed: %u\n", numLines );
 	printf( "Number count in the database: %lu\n", nums.numCount() );
 }

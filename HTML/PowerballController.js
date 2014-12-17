@@ -54,5 +54,42 @@ function PowerballController($scope, $location)
 ']}';
 
 	$scope.pbObj = JSON.parse(pbJSON);
-	console.log( $scope.pbObj );
+	//console.log( $scope.pbObj );
+
+	$scope.whiteballCounts = [];
+	$scope.whiteballCounts.length = 59;
+	for( i = 0; i < $scope.whiteballCounts.length; i++ )
+	{
+		$scope.whiteballCounts[i] = 0;
+	}
+
+	$scope.powerballCounts = [];
+	$scope.powerballCounts.length = 35;
+	for( i = 0; i < $scope.powerballCounts.length; i++ )
+	{
+		$scope.powerballCounts[i] = 0;
+	}
+
+	$scope.powerplayCounts = [];
+	$scope.powerplayCounts.length = 59;
+	for( i = 0; i < $scope.powerplayCounts.length; i++ )
+	{
+		$scope.powerplayCounts[i] = 0;
+	}
+
+	for( i = 0; i < $scope.pbObj.numbers.length; i++ )
+	{
+		if( $scope.pbObj.numbers[i].type == "0" )
+		{
+			$scope.whiteballCounts[$scope.pbObj.numbers[i].number-1] = $scope.whiteballCounts[$scope.pbObj.numbers[i].number-1] + 1;
+		}
+		else if( $scope.pbObj.numbers[i].type == "1" )
+		{
+			$scope.powerballCounts[$scope.pbObj.numbers[i].number-1]++;
+		}
+		else if( $scope.pbObj.numbers[i].type == "2" )
+		{
+			$scope.powerplayCounts[$scope.pbObj.numbers[i].number-1]++;
+		}
+	}
 }
